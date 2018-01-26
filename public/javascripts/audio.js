@@ -11,42 +11,45 @@ var tup = document.getElementById("timeup");
 var tdown = document.getElementById("timedown");
 
 volup.addEventListener("touchstart", handleVolUp, false);
+volup.addEventListener("mouseenter", handleVolUp, false)
 voldown.addEventListener("touchstart", handleVolDown, false);
+
 
 //time details
 var _time = 1;
 tup.addEventListener("mouseenter", handleTimeUp, false);
 tdown.addEventListener("mouseenter", handleTimeDown, false);
 
+//initialise the model
+var _model = Array();
 
 function handleTimeUp() {
-   console.log("time before: " + _time);
    _time += 0.1;
-   console.log("time after: " + _time);
 }
 
 function handleTimeDown() {
-   console.log("vol before: " + _time);
    if (_time > 0) {
       _time -= 0.1;
    }
-   console.log("vol before: " + _time);
 }
 
 function handleVolUp() {
-   console.log("vol before: " + _gain);
    if (_gain < 1) {
       _gain += 0.1;
    }
-   console.log("vol after: " + _gain);
+   console.log("Gain was " + _gain);
+   console.log(_model);
+   postData(_model);
 }
 
 function handleVolDown() {
-   console.log("vol before: " + _gain);
    if (_gain > 0) {
       _gain -= 0.1;
    }
-   console.log("vol before: " + _gain);
+}
+
+function postData(data) {
+  $.post('/steele', {"key": "fakekey", "data": JSON.stringify(data)});
 }
 
 function get_as() {
