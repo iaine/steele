@@ -22,6 +22,7 @@
       oscillator.frequency.value = frequency;
       oscillator.start(_old);
       console.log('{ duration:' + (_old + (0.001+ _duration)) + ', volume: ' + loud + ', pitch:' + frequency + ', id: ' + _old +'}');
+      _model.push('{ duration:' + (_old + (0.001+ _duration)) + ', volume: ' + loud + ', pitch:' + frequency + ', id: ' + _old +'}');
       oscillator.stop(_old + (0.001 + _duration));
       oscillator.connect(audioCtx.destination);
     };
