@@ -11,14 +11,14 @@ var tup = document.getElementById("timeup");
 var tdown = document.getElementById("timedown");
 
 volup.addEventListener("touchstart", handleVolUp, false);
-volup.addEventListener("mouseenter", handleVolUp, false)
+volup.addEventListener("click", handleVolUp, false)
 voldown.addEventListener("touchstart", handleVolDown, false);
-
+voldown.addEventListener("click", handleVolDown, false)
 
 //time details
 var _time = 1;
-tup.addEventListener("mouseenter", handleTimeUp, false);
-tdown.addEventListener("mouseenter", handleTimeDown, false);
+tup.addEventListener("click", handleTimeUp, false);
+tdown.addEventListener("click", handleTimeDown, false);
 
 //initialise the model
 var _model = Array();
