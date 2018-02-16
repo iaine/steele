@@ -2,8 +2,13 @@ extends layout
 
 block content
   h1= title
-  p Holding page for the Elocution Society Simulation
-  ul
-    li a(href='steele') Joshua Steele
-    li a(href='fitzpatrick') Thaddeus Fitzpatrick
-    li a(href='anderson') JW Anderson
+  p To be, or not to be, that is the Question: 
+  p Whether 'tis Nobler in the minde to suffer
+  p F: Whether it is nobler in the mind, to suffer –
+  p The Slings and Arrowes of outragious Fortune,
+  p F: The stings and arrows &c.
+  li: p(id='playbtn', onclick='play()') Play  
+
+  script(src='/javascripts/note.js')
+  script(src='/javascripts/object.js')
+  script(src='/javascripts/newaudio.js')
