@@ -8,9 +8,8 @@
        { "id":6, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
        { "id":7, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
        { "id":8, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
-       { "id":0, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
+       { "id":9, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
        { "id":10, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
-       //End line 1
        { "id":11, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
        { "id":12, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
        { "id":13, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
@@ -20,9 +19,7 @@
        { "id":17, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
        { "id":18, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
        { "id":19, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
-       { "id":20, "pitch" : 233.1, "rate": 1, "duration": 1, "volume": 0.5 },
-       { "id":20, "pitch" : 277.2, "rate": 1, "duration": 1, "volume": 0.5 }
-       //{ "alt": [20,21]}
-       //End line 2
-   ]
+       { "id":20, "pitch" : [233.1,277.2], "rate": 1, "duration": 1, "volume": 0.5 }
+   ],
+   "alt": [20]
 }
