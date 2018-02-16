@@ -62,14 +62,20 @@ function play () {
 $.ajax({url: "data/fitzpatrick", success: function( data ) {
   var notes = data.rows;
 
-   window.AudioContext = window.AudioContext || window.webkitAudioContext;
+   //window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-   var audioCtx = new AudioContext();
+   var audioCtx = new AudioContext(); 
+   //set the alt notes for checking later.
+   var alt = data.alt;
    notes.forEach(function (i) {
       note = new Note();
       //frequency, note_length, volume, id
       //@todo fix the rate change
-      note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
+      if (alt.includes(i.id)) {
+         note.altnote(audioCtx, i);
+      } else {
+         note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
+      }
    });
  
 }}); //end function
