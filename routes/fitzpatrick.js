@@ -5,12 +5,20 @@ var redis = require("redis"),
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('fitzpatrick', { title: 'Thomas Fitzpatrick' });
+router.get('/:id', function(req, res, next) {
+  let title = '';
+  if (req.params.id == "garrick" ) {
+    title = "David Garrick";
+  } else if (req.params.id == "fitzpatrick" ) {
+    title = "Thaddeus Fitzpatrick";
+  } else if (req.params.id == "steele" ) {
+    title = "Joshua Steele";
+  }
+  res.render('fitzpatrick', { title: title, data: req.params.id });
 });
 
 /* POST data to the Redis backend */
-router.post('/', function(req, res, next) {
+router.post('/:id', function(req, res, next) {
   setData(req);
 });
 

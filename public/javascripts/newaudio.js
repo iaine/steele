@@ -56,12 +56,21 @@ function postData(data) {
 }
 
 
-function play () {
+function play (datafile) {
+let urltype = '';
+if (datafile == "garrick")
+{
+  urltype = "../data/garrick";
+} else if (datafile == "steele")
+{
+  urltype = "../data/steele";
+} else {
+  urltype = "../data/fitzpatrick";
+}
 
-
-$.ajax({url: "data/fitzpatrick", success: function( data ) {
+$.ajax({url: urltype, success: function( data ) {
   var notes = data.rows;
-
+  console.log(data);
    //window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
    var audioCtx = new AudioContext(); 
@@ -71,11 +80,7 @@ $.ajax({url: "data/fitzpatrick", success: function( data ) {
       note = new Note();
       //frequency, note_length, volume, id
       //@todo fix the rate change
-      if (alt.includes(i.id)) {
-         note.altnote(audioCtx, i);
-      } else {
-         note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
-      }
+      note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
    });
  
 }}); //end function
