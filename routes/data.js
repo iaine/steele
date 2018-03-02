@@ -11,14 +11,16 @@ router.get('/compare', function(req, res, next) {
   let A = new Array();
   let B = new Array(); 
   let a = steele;
-  
   let b = garrick;
+
+  var diffs = Array();
   buildSymbolTable(a.rows, A);
   buildSymbolTable(b.rows, B);
   console.log('A ' + A.length + ' B ' + B.length);
   let master = new Array();
   alignSymbolLists(A, B, master);
-  console.log(master);
+  createDifference(master);
+  console.log(diffs);
   res.send("<p>Hello</p>");
 });
 
@@ -88,6 +90,18 @@ var alignSymbolLists = function(witness, test, master) {
    } else if (m>0 && n == 0) {
      master.push({'symbol': 'delete', 'witness': '', 'test':test });
    }
+}
+
+var createDifference = function(aligned_list) {
+    aligned_list.forEach(function(d) {
+        let _tmp = Array();
+        let keys = Reflect.ownKeys(d.witness);
+         keys.forEach(function(a) {
+            console.log("key: " + a);
+             _tmp.push({a : (d.witness.a - d.test.a)});
+         });
+         diffs.push(_tmp);
+    });
 }
 
 function isPause(freq) {
