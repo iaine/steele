@@ -4,6 +4,10 @@ var redis = require("redis"),
 
 var router = express.Router();
 
+router.get('/compare', function(req, res, next) {
+  res.render('compare', { title: 'Compare' });
+});
+
 /* GET home page. */
 router.get('/:id', function(req, res, next) {
   let title = '';
