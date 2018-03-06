@@ -19,9 +19,9 @@
     };
 
     // Play two notes
-    function altnote(context, witness, test) {
+    function altnote(context, witness, test, alignid) {
       oscillatorL = context.createOscillator();
-      console.log(witness);
+      
       oscillatorL.frequency.value = witness['pitch'];
       oscillatorR = context.createOscillator();
       oscillatorR.frequency.value = test['pitch'];
@@ -33,10 +33,10 @@
       oscillatorR.connect(mergerNode, 0, 1);
       //connect output #0 of the oscillator to input #1 of the mergerNode
 
-      oscillatorL.start(witness['id']);
-      oscillatorL.stop(witness['id'] + witness['duration']); //stop "left" tone after 2 s
-      oscillatorR.start(test['id']);
-      oscillatorR.stop(test['id']+test['duration']);
+      oscillatorL.start(alignid);
+      oscillatorL.stop(alignid + witness['duration']); //stop "left" tone after 2 s
+      oscillatorR.start(alignid);
+      oscillatorR.stop(alignid + test['duration']);
     };
 
     return {
