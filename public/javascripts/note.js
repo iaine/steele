@@ -20,11 +20,14 @@
 
     // Play two notes
     function altnote(context, witness, test, alignid) {
+ 
       oscillatorL = context.createOscillator();
       
-      oscillatorL.frequency.value = witness['pitch'];
+      oscillatorL.frequency.setValueAtTime(witness['pitch'], alignid);
+      oscillatorL.frequency.exponentialRampToValueAtTime(witness['pitch'], context.currentTime + 0.03);
       oscillatorR = context.createOscillator();
-      oscillatorR.frequency.value = test['pitch'];
+      oscillatorR.frequency.setValueAtTime(test['pitch'], alignid);
+      oscillatorR.frequency.exponentialRampToValueAtTime(test['pitch'], context.currentTime + 0.03);
       mergerNode = context.createChannelMerger(2); //create mergerNode with 2 inputs
       mergerNode.connect(context.destination);
 
@@ -34,9 +37,10 @@
       //connect output #0 of the oscillator to input #1 of the mergerNode
 
       oscillatorL.start(alignid);
-      oscillatorL.stop(alignid + witness['duration']); //stop "left" tone after 2 s
+      oscillatorL.stop(alignid + witness['duration']);
       oscillatorR.start(alignid);
       oscillatorR.stop(alignid + test['duration']);
+      
     };
 
     return {
