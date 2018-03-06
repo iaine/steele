@@ -5,14 +5,14 @@ var garrick = require('../public/garrick.json')
 var fs = require("fs");
 
 var router = express.Router();
-
+var alignid;
 /* test compare page */
 router.get('/compare', function(req, res, next) {
   let A = new Array();
   let B = new Array(); 
   let a = steele;
   let b = garrick;
-
+  alignid = 0;
   var diffs = Array();
   buildSymbolTable(a.rows, A);
   buildSymbolTable(b.rows, B);
@@ -69,18 +69,18 @@ var alignSymbolLists = function(witness, test, master) {
      //for (let i = 0;i< n;i++) {
        //for (let j = 0; j<m;m++) {
          if (witness[0].symbol == test[0].symbol) {
-           master.push({'symbol': '', 'witness': witness[0].data, 'test': test[0].data});
+           master.push({'symbol': '', 'id': alignid++, 'witness': witness[0].data, 'test': test[0].data});
            alignSymbolLists(witness.slice(1), test.slice(1), master);
          } else if (witness[0].symbol != test[0].symbol) {
-            master.push({'symbol': 'change', 'witness': '', 'test': test[0].data});
+            master.push({'symbol': 'change','id': alignid++, 'witness': witness[0].data, 'test': test[0].data});
             alignSymbolLists(witness.slice(1), test.slice(2), master);
         }
        //}
      //}
    } else if (n>0 && m == 0) {
-     master.push({'symbol': 'delete', 'witness': witness, 'test':'' });
+     master.push({'symbol': 'delete', 'id': alignid++, 'witness': witness, 'test':'' });
    } else if (m>0 && n == 0) {
-     master.push({'symbol': 'add', 'witness': '', 'test':test });
+     master.push({'symbol': 'add', 'id': alignid++, 'witness': '', 'test':test });
    }
 }
 
