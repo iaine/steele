@@ -19,32 +19,24 @@
     };
 
     // Play two notes
-    function altnote(audioCtx, noteArr) {
-      
-      this.context = audioCtx;
- 
-      let id = noteArr.id;
-      let oscillator1 = this.context.createOscillator();
-      let gainNode = audioCtx.createGain();
-      gainNode.gain.cancelScheduledValues(this.context.currentTime);
-      gainNode.connect(audioCtx.destination);
-      gainNode.gain.setValueAtTime(0.3, id)
-      oscillator1.type = "triangle";
-      oscillator1.frequency.setValueAtTime(50, id);
-      oscillator1.start(id);
-      oscillator1.connect(this.context.destination);
-      oscillator1.stop(id + noteArr.duration);
+    function altnote(context, witness, test) {
+      oscillatorL = context.createOscillator();
+      console.log(witness);
+      oscillatorL.frequency.value = witness['pitch'];
+      oscillatorR = context.createOscillator();
+      oscillatorR.frequency.value = test['pitch'];
+      mergerNode = context.createChannelMerger(2); //create mergerNode with 2 inputs
+      mergerNode.connect(context.destination);
 
-      let oscillator2 = this.context.createOscillator();
-      let gainNode2 = this.context.createGain();
-      gainNode2.connect(this.context.destination);
-      gainNode2.gain.cancelScheduledValues(this.context.currentTime);
-      gainNode2.gain.setValueAtTime(0.3, (id+ this.context.currentTime));
-      oscillator2.type = "sine";
-      oscillator2.frequency.setValueAtTime(60, (id+ this.context.currentTime));
-      //oscillator2.connect(this.context.destination);
-      oscillator2.start((id+ this.context.currentTime));
-      oscillator2.stop((id+ this.context.currentTime) + noteArr.duration);
+      oscillatorL.connect(mergerNode, 0, 0);
+      //connect output #0 of the oscillator to input #0 of the mergerNode
+      oscillatorR.connect(mergerNode, 0, 1);
+      //connect output #0 of the oscillator to input #1 of the mergerNode
+
+      oscillatorL.start(witness['id']);
+      oscillatorL.stop(witness['id'] + witness['duration']); //stop "left" tone after 2 s
+      oscillatorR.start(test['id']);
+      oscillatorR.stop(test['id']+test['duration']);
     };
 
     return {
