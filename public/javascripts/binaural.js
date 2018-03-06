@@ -67,7 +67,7 @@ $.ajax({url: '/data/compare', success: function( data ) {
       note = new Note();
       //frequency, note_length, volume, id
       //@todo fix the rate change
-      note.altnote(audioCtx, i.witness, i.test);
+      note.altnote(audioCtx, i.witness, i.test, i.id);
    });
  
 }}); //end function
