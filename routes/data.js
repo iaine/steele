@@ -11,14 +11,16 @@ router.get('/compare', function(req, res, next) {
   let A = new Array();
   let B = new Array(); 
   let a = steele;
-  
   let b = garrick;
+
+  var diffs = Array();
   buildSymbolTable(a.rows, A);
   buildSymbolTable(b.rows, B);
   console.log('A ' + A.length + ' B ' + B.length);
   let master = new Array();
   alignSymbolLists(A, B, master);
-  console.log(master);
+  createDifference(master);
+  console.log(diffs);
   res.send("<p>Hello</p>");
 });
 
@@ -64,27 +66,6 @@ var buildSymbolTable = function(witness, symbol) {
        symbol.push({'symbol': 'note', 'data': c});
     }
   });
-  /*let n = witness.length;
-  let m = test.length;
- 
-   
-  if (n > 0 && m > 0) {
-    console.log('n ' + n + ' b ' + m);
-    if (witness[1] == test[1]) {
-      symbol.add({'symbol':'', 'a':witness[n],'b':test[m]});
-      console.log('a' + witness[n] + ' b ' + test[m]);
-      
-      buildSymbolTable(witness.slice(1), test.slice(1), symbol);
-    } else {
-      //we assume that there is a change here
-      symbol.add({'symbol':'change', 'a':witness[n],'b':test[m]});
-      buildSymbolTable(witness.slice(1), test.slice(1), symbol);
-    }
-  } else if (n > 0) {
-    symbol.add({'symbol':'delete', 'a': witness[n],'b':""});
-  } else {
-    symbol.add({'symbol':'add', 'a':'','b':test[m]});
-  }*/
 }
 
 var alignSymbolLists = function(witness, test, master) {
@@ -96,10 +77,10 @@ var alignSymbolLists = function(witness, test, master) {
      //for (let i = 0;i< n;i++) {
        //for (let j = 0; j<m;m++) {
          if (witness[0].symbol == test[0].symbol) {
-           master.push({'symbol': '', 'witness': witness[0], 'test': test[0]});
+           master.push({'symbol': '', 'witness': witness[0].data, 'test': test[0].data});
            alignSymbolLists(witness.slice(1), test.slice(1), master);
          } else if (witness[0].symbol != test[0].symbol) {
-            master.push({'symbol': 'change', 'witness': '', 'test': test[0]});
+            master.push({'symbol': 'change', 'witness': '', 'test': test[0].data});
             alignSymbolLists(witness.slice(1), test.slice(2), master);
         }
        //}
@@ -109,6 +90,18 @@ var alignSymbolLists = function(witness, test, master) {
    } else if (m>0 && n == 0) {
      master.push({'symbol': 'delete', 'witness': '', 'test':test });
    }
+}
+
+var createDifference = function(aligned_list) {
+    aligned_list.forEach(function(d) {
+        let _tmp = Array();
+        let keys = Reflect.ownKeys(d.witness);
+         keys.forEach(function(a) {
+            console.log("key: " + a);
+             _tmp.push({a : (d.witness.a - d.test.a)});
+         });
+         diffs.push(_tmp);
+    });
 }
 
 function isPause(freq) {
