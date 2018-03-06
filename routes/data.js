@@ -19,9 +19,9 @@ router.get('/compare', function(req, res, next) {
   console.log('A ' + A.length + ' B ' + B.length);
   let master = new Array();
   alignSymbolLists(A, B, master);
-  createDifference(master);
-  console.log(diffs);
-  res.send("<p>Hello</p>");
+  //createDifference(master, diffs);
+  //console.log(typeof(diffs));
+  res.send(master);
 });
 
 /* GET fitzpatrick */
@@ -46,14 +46,6 @@ router.get('/:id', function(req, res, next) {
 router.get('/as/:id', function(req, res, next) {
   var contents = fs.readFileSync("public/as/" + req.params.id + ".as");
   res.send(contents);
-});
-
-/* test compare page */
-router.get('/compare', function(req, res, next) {
-  let Symbol = buildSymbolTable(steele, garrick);
-  console.log("Symbol table");
-  console.log(contents);
-  res.send("<p>Hello</p>");
 });
 
 var buildSymbolTable = function(witness, symbol) {
@@ -88,20 +80,36 @@ var alignSymbolLists = function(witness, test, master) {
    } else if (n>0 && m == 0) {
      master.push({'symbol': 'delete', 'witness': witness, 'test':'' });
    } else if (m>0 && n == 0) {
-     master.push({'symbol': 'delete', 'witness': '', 'test':test });
+     master.push({'symbol': 'add', 'witness': '', 'test':test });
    }
 }
 
-var createDifference = function(aligned_list) {
+var createDifference = function(aligned_list, diffs) {
     aligned_list.forEach(function(d) {
         let _tmp = Array();
+        if(d.witness != '') {
         let keys = Reflect.ownKeys(d.witness);
          keys.forEach(function(a) {
-            console.log("key: " + a);
-             _tmp.push({a : (d.witness.a - d.test.a)});
+            //console.log("key: " + a);
+            if (a != 'id') {
+             _tmp[a] = (d.witness[a] - d.test[a]);
+           } else {
+             _tmp[a] = d.witness[a];
+           }
          });
          diffs.push(_tmp);
-    });
+        } else {
+        let keys = Reflect.ownKeys(d.test);
+         keys.forEach(function(a) {
+           if (a != 'id') {
+             _tmp[a] = (0 - d.test[a]);
+           } else {
+             _tmp[a] = d.test[a];
+           }
+         });
+         diffs.push(_tmp);    
+        }
+	});
 }
 
 function isPause(freq) {
