@@ -19,9 +19,9 @@ router.get('/compare', function(req, res, next) {
   console.log('A ' + A.length + ' B ' + B.length);
   let master = new Array();
   alignSymbolLists(A, B, master);
-  //createDifference(master, diffs);
+  createDifference(master, diffs);
   //console.log(typeof(diffs));
-  res.send(master);
+  res.send(diffs);
 });
 
 /* GET fitzpatrick */
@@ -79,14 +79,16 @@ var alignSymbolLists = function(witness, test, master) {
      //}
    } else if (n>0 && m == 0) {
      master.push({'symbol': 'delete', 'id': alignid++, 'witness': witness, 'test':'' });
+     alignSymbolLists(witness.slice(1), test, master);
    } else if (m>0 && n == 0) {
      master.push({'symbol': 'add', 'id': alignid++, 'witness': '', 'test':test });
+     alignSymbolLists(witness, test.slice(1), master);
    }
 }
 
 var createDifference = function(aligned_list, diffs) {
     aligned_list.forEach(function(d) {
-        let _tmp = Array();
+        let _tmp = {};
         if(d.witness != '') {
         let keys = Reflect.ownKeys(d.witness);
          keys.forEach(function(a) {
@@ -97,7 +99,8 @@ var createDifference = function(aligned_list, diffs) {
              _tmp[a] = d.witness[a];
            }
          });
-         diffs.push(_tmp);
+         let _t = JSON.stringify(_tmp);
+         diffs.push(_t); 
         } else {
         let keys = Reflect.ownKeys(d.test);
          keys.forEach(function(a) {
@@ -107,8 +110,11 @@ var createDifference = function(aligned_list, diffs) {
              _tmp[a] = d.test[a];
            }
          });
-         diffs.push(_tmp);    
+         let _t = JSON.stringify(_tmp);
+         diffs.push(_t);    
         }
+        console.log("Diffs");
+       // console.log(diffs);
 	});
 }
 
