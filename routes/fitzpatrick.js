@@ -8,6 +8,14 @@ router.get('/compare', function(req, res, next) {
   res.render('compare', { title: 'Compare' });
 });
 
+router.get('/align', function(req, res, next) {
+  res.render('align', { title: 'Time Differences' });
+});
+
+router.get('/pause', function(req, res, next) {
+  res.render('pause', { title: 'Listen to Pauses' });
+});
+
 /* GET home page. */
 router.get('/:id', function(req, res, next) {
   let title = '';
