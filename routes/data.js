@@ -13,7 +13,7 @@ router.get('/compare', function(req, res, next) {
   let a = steele;
   let b = garrick;
   alignid = 0;
- 
+  var diffs = Array();
   buildSymbolTable(a.rows, A);
   buildSymbolTable(b.rows, B);
   console.log('A ' + A.length + ' B ' + B.length);
