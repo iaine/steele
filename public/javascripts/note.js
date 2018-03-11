@@ -45,8 +45,67 @@
       
     };
 
+    // Play two notes
+    function pausenote(context, witness, test, alignid) {
+      var witnesspause = 0;
+      var testpause = 0;
+
+      let volumeL = 0;
+      let volumeR = 0;
+
+      if (witness.pitch < 50.0){
+         witnesspause =  230.0;
+         volumeL = 0.5; 
+      }else {
+         witnesspause =  witness.pitch;
+         //witnesspause =  100.0;
+         volumeL = 0.1;
+      }
+
+      if (test.pitch < 50.0){
+         testpause =  230.0;
+         volumeR = 0.5;     
+      }else { 
+         testpause =  test.pitch;
+         //test.pitch = 100.0;
+         volumeR = 0.1;
+      }
+      var testpause = (test.pitch < 50.0)? 230.0 : test.pitch;
+
+      let gainNodeL = context.createGain();
+      gainNodeL.connect(context.destination);
+      gainNodeL.gain.setValueAtTime(volumeL, alignid);
+
+      let gainNodeR = context.createGain();
+      gainNodeR.connect(context.destination);
+      gainNodeR.gain.setValueAtTime(volumeR, alignid);
+
+      console.log('test ' + witnesspause + ' witness ' + testpause);
+      oscillatorL = context.createOscillator();
+  
+      oscillatorL.frequency.setValueAtTime(witnesspause, alignid);
+      oscillatorL.frequency.exponentialRampToValueAtTime(witnesspause, context.currentTime + 0.03);
+
+      oscillatorR = context.createOscillator();
+      oscillatorR.frequency.setValueAtTime(testpause, alignid);
+      oscillatorR.frequency.exponentialRampToValueAtTime(testpause, context.currentTime + 0.03);
+      mergerNode = context.createChannelMerger(2); //create mergerNode with 2 inputs
+      mergerNode.connect(context.destination);
+
+      oscillatorL.connect(mergerNode, 0, 0);
+      //connect output #0 of the oscillator to input #0 of the mergerNode
+      oscillatorR.connect(mergerNode, 0, 1);
+      //connect output #0 of the oscillator to input #1 of the mergerNode
+
+      oscillatorL.start(alignid);
+      oscillatorL.stop(alignid + witness['duration']);
+      oscillatorR.start(alignid);
+      oscillatorR.stop(alignid + test['duration']);
+
+    };
     return {
         start:start, 
-        altnote:altnote
+        altnote:altnote, 
+        pausenote:pausenote
     }
   };
