@@ -10,11 +10,13 @@
       let gainNode = audioCtx.createGain();
       gainNode.connect(audioCtx.destination);
       gainNode.gain.setValueAtTime(volume, id);
+      
       oscillator.type = "sine";
       oscillator.frequency.setValueAtTime(frequency, id);
+      oscillator.frequency.exponentialRampToValueAtTime(frequency, audioCtx.currentTime + 0.03);
       oscillator.start(id);
       
-      oscillator.stop(id + (0.001 + note_length));
+      oscillator.stop(id + note_length);
       oscillator.connect(audioCtx.destination);
     };
 
