@@ -19,8 +19,8 @@ router.get('/compare', function(req, res, next) {
   console.log('A ' + A.length + ' B ' + B.length);
   let master = new Array();
   alignSymbolLists(A, B, master);
-  //createDifference(master, diffs);
-  //console.log(typeof(diffs));
+  createDifference(master, diffs);
+  console.log(diffs);
   res.send(master);
 });
 
@@ -86,7 +86,7 @@ var alignSymbolLists = function(witness, test, master) {
 
 var createDifference = function(aligned_list, diffs) {
     aligned_list.forEach(function(d) {
-        let _tmp = Array();
+        let _tmp = {};
         if(d.witness != '') {
         let keys = Reflect.ownKeys(d.witness);
          keys.forEach(function(a) {
@@ -97,7 +97,7 @@ var createDifference = function(aligned_list, diffs) {
              _tmp[a] = d.witness[a];
            }
          });
-         diffs.push(_tmp);
+         diffs.push('{' + _tmp.join() + '}');
         } else {
         let keys = Reflect.ownKeys(d.test);
          keys.forEach(function(a) {
@@ -107,7 +107,7 @@ var createDifference = function(aligned_list, diffs) {
              _tmp[a] = d.test[a];
            }
          });
-         diffs.push(_tmp);    
+         diffs.push('{' + _tmp.join() + '}');    
         }
 	});
 }
