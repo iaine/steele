@@ -16,12 +16,12 @@ router.get('/compare', function(req, res, next) {
   var diffs = Array();
   buildSymbolTable(a.rows, A);
   buildSymbolTable(b.rows, B);
-  console.log('A ' + A.length + ' B ' + B.length);
+
   let master = new Array();
   alignSymbolLists(A, B, master);
-  createDifference(master, diffs);
+  //createDifference(master, diffs);
   //console.log(typeof(diffs));
-  res.send(diffs);
+  res.send(master);
 });
 
 /* GET fitzpatrick */
@@ -73,14 +73,16 @@ var alignSymbolLists = function(witness, test, master) {
            alignSymbolLists(witness.slice(1), test.slice(1), master);
          } else if (witness[0].symbol != test[0].symbol) {
             master.push({'symbol': 'change','id': alignid++, 'witness': witness[0].data, 'test': test[0].data});
-            alignSymbolLists(witness.slice(1), test.slice(2), master);
+            alignSymbolLists(witness, test.slice(1), master);
         }
        //}
      //}
    } else if (n>0 && m == 0) {
+     console.log('m ' + m + ' n ' + n);
      master.push({'symbol': 'delete', 'id': alignid++, 'witness': witness, 'test':'' });
      alignSymbolLists(witness.slice(1), test, master);
    } else if (m>0 && n == 0) {
+     console.log('m ' + m + ' n ' + n);
      master.push({'symbol': 'add', 'id': alignid++, 'witness': '', 'test':test });
      alignSymbolLists(witness, test.slice(1), master);
    }
