@@ -19,9 +19,27 @@ router.get('/compare', function(req, res, next) {
 
   let master = new Array();
   alignSymbolLists(A, B, master);
-  //createDifference(master, diffs);
-  //console.log(typeof(diffs));
+  createDifference(master, diffs);
+  
   res.send(master);
+});
+
+/* test compare page */
+router.get('/align', function(req, res, next) {
+  let A = new Array();
+  let B = new Array();
+  let a = steele;
+  let b = garrick;
+  alignid = 0;
+  var diffs = Array();
+  buildSymbolTable(a.rows, A);
+  buildSymbolTable(b.rows, B);
+  console.log('A ' + A.length + ' B ' + B.length);
+  let master = new Array();
+  alignSymbolLists(A, B, master);
+  createDifference(master, diffs);
+  console.log(diffs);
+  res.send(diffs);
 });
 
 /* GET fitzpatrick */
