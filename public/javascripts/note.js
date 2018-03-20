@@ -15,7 +15,7 @@
       oscillator.frequency.setValueAtTime(frequency, id);
       oscillator.frequency.exponentialRampToValueAtTime(frequency, audioCtx.currentTime + 0.03);
       oscillator.start(id);
-      
+      _model.push({'freq': frequency, 'gain': volume, 'duration': note_length, 'id':id  }); 
       oscillator.stop(id + note_length);
       oscillator.connect(audioCtx.destination);
     };
