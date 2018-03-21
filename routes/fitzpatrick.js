@@ -32,41 +32,20 @@ router.get('/:id', function(req, res, next) {
 /* POST data to the Redis backend */
 router.post('/:id', function(req, res, next) {
   setData(req);
+  res.statusCode = 200;
 });
-
-// fake endpoint to test the data export
-router.get('/data/:type', function(req,res, next) {
-res.set('Content-Type', 'application/xml');
-var xml = '<dso>';
-xml += '<head><publication type="'+ req.params.type +'"/></head>';
-if (req.params.type == 'collection') {
-  xml += '<body>' + fakeCollection() + '</body>';
-} else {
-  xml += '<body>' + fakeAggregation() + '</body>';
-}
-xml += '</dso>';
-res.send(xml);
-});
-
-function fakeCollection() {
-  return '<part id="1"><note freq="440" dur="0.3" vol="0.5" /><note freq="441" dur="0.3" vol="0.6" /></part>' +
-         '<part id="2"><note freq="440" dur="0.3" vol="0.5" /><note freq="230" dur="0.2" vol="0.5" /></part>';
-}
-
-function fakeAggregation() {
-  return '<part id="1"><note freq="440.5555" dur="0.3" vol="0.55" /><note freq="330.08" dur="0.25" vol="0.6" /></part>';
-}
 
 /*
  Function to store the data
 */
 function setData(req) {
   var milliseconds = (new Date).getTime();
-
+  var _id = req.params.id;
   var key = req.body.key;
   var _data = req.body.data;
+  var _type = req.body._type;
   
-  client.hset('fitzpatrick::'+key, milliseconds, _data, redis.print);
+  client.hset(_id + '::' + key, _type + milliseconds, _data, redis.print);
 
 }
 
