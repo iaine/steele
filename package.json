@@ -12,10 +12,12 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "morgan": "~1.9.0",
+    "n3": "^0.11.2",
     "pug": "2.0.0-beta11",
     "redis": "^2.8.0",
     "serve-favicon": "~2.4.5",
-    "supercollider": "^1.4.2"
+    "supercollider": "^1.4.2",
+    "webpack": "^4.2.0"
   },
   "devDependencies": {
     "nodemon": "^1.14.11"
