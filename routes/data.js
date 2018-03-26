@@ -13,13 +13,12 @@ router.get('/compare', function(req, res, next) {
   let a = steele;
   let b = garrick;
   alignid = 0;
-  var diffs = Array();
+  
   buildSymbolTable(a.rows, A);
   buildSymbolTable(b.rows, B);
 
   let master = new Array();
   alignSymbolLists(A, B, master);
-  createDifference(master, diffs);
   
   res.send(master);
 });
@@ -59,6 +58,26 @@ router.get('/:id', function(req, res, next) {
   }
   res.send(req.params.id);
 });
+
+// Post data back to the server
+/* POST data to the Redis backend */
+router.post('/:id', function(req, res, next) {
+  setData(req);
+  res.send(req.params.id);
+});
+
+/*
+ Function to store the data
+*/
+function setData(req) {
+  var milliseconds = (new Date).getTime();
+
+  var key = req.body.key;
+  var _data = req.body.data;
+
+  client.hset('fitzpatrick::'+key, milliseconds, _data, redis.print);
+
+}
 
 /* GET AS page */
 router.get('/as/:id', function(req, res, next) {

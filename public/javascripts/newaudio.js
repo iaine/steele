@@ -1,3 +1,4 @@
+
 var properties = [];
 
 var _gain = 0.5;
@@ -22,6 +23,7 @@ tdown.addEventListener("click", handleTimeDown, false);
 
 //initialise the model
 var _model = Array();
+var _prov = Array();
 
 function handleTimeUp() {
    _time += 0.1;
@@ -37,7 +39,7 @@ function handleTimeDown() {
 function handleVolUp() {
    if (_gain < 1) {
       //volume(dB) = 20 log10 (a1 / a0)
-      _gain = 20 * Math.log10(_gain / (_gain + 0.1));
+      _gain = 20 * Math.log10((_gain + 0.1) / _gain);
    }
    console.log("Gain was " + _gain);
    //console.log(_model);
@@ -51,10 +53,10 @@ function handleVolDown() {
    }
 }
 
-function postData(data) {
-  $.post('/steele', {"key": "fakekey", "data": JSON.stringify(data)});
+function postData(endpoint, provdata, _type) {
+  console.log('posting');
+  $.post(endpoint, {"type": _type, "key": "fake", "data": JSON.stringify(provdata)});
 }
-
 
 function play (datafile) {
 let urltype = '';
@@ -68,20 +70,24 @@ if (datafile == "garrick")
   urltype = "../data/fitzpatrick";
 }
 
+var notes = Array();
 $.ajax({url: urltype, success: function( data ) {
-  var notes = data.rows;
-  console.log(data);
+  notes = data.rows;
+  
    //window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
    var audioCtx = new AudioContext(); 
-   //set the alt notes for checking later.
-   var alt = data.alt;
    notes.forEach(function (i) {
       note = new Note();
       //frequency, note_length, volume, id
       //@todo fix the rate change
       note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
    });
- 
+   console.log(_model);
+   //store the model of the notes
+   postData(datafile, _model, 'notes');
+   postData('../prov/'+datafile, datafile, '');
 }}); //end function
+
+
 };
