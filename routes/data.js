@@ -41,6 +41,8 @@ router.get('/align', function(req, res, next) {
   res.send(diffs);
 });
 
+
+
 /* GET fitzpatrick */
 router.get('/:id', function(req, res, next) {
   switch(req.params.id) {
