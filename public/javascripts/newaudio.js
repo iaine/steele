@@ -3,6 +3,8 @@ var properties = [];
 
 var _gain = 0.5;
 
+var _type = '';
+
 //set listeners for tags
 var volup = document.getElementById("volup");
 var voldown = document.getElementById("voldown");
@@ -35,12 +37,21 @@ function handleTimeDown() {
    }
 }
 
+function createAnnotation(annoType, annoValue) {
+  $.post("http://127.0.0.1:3000/prov/comment", {"data": makeAnnotationBody(annoType, annoValue)} );
+}
+
+function makeAnnotationBody(annoType, annoValue) {
+return  JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", "id": "http://example.org/anno5", "type": "Annotation","created": new Date().toISOString(), "body": {"type" : annoType,"value" : annoValue,"format" : "text/plain"},"target": "http://127.0.0.1/sonify/"+_type });
+}
+
 //using the decibel calculation for volume
 function handleVolUp() {
-   if (_gain < 1) {
+   //if (_gain < 1) {
       //volume(dB) = 20 log10 (a1 / a0)
       _gain = 20 * Math.log10((_gain + 0.1) / _gain);
-   }
+      createAnnotation("volume", _gain);
+   //}
    console.log("Gain was " + _gain);
    //console.log(_model);
    //postData(_model);
@@ -59,6 +70,8 @@ function postData(endpoint, provdata, _type) {
 }
 
 function play (datafile) {
+_type = datafile;
+//make generic so we can re-use for comments
 let urltype = '';
 if (datafile == "garrick")
 {
