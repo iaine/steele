@@ -17,6 +17,7 @@
     "redis": "^2.8.0",
     "serve-favicon": "~2.4.5",
     "supercollider": "^1.4.2",
+    "uuid": "^3.2.1",
     "webpack": "^4.2.0"
   },
   "devDependencies": {
