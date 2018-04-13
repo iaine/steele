@@ -3,7 +3,15 @@ var properties = [];
 
 var _gain = 0.5;
 
+//set type for the annotation
 var _type = '';
+
+//store the session key
+var session = '';
+
+//used to number the identity
+var commentid = 0;
+var id = 0;
 
 //set listeners for tags
 var volup = document.getElementById("volup");
@@ -42,19 +50,14 @@ function createAnnotation(annoType, annoValue) {
 }
 
 function makeAnnotationBody(annoType, annoValue) {
-return  JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", "id": "http://example.org/anno5", "type": "Annotation","created": new Date().toISOString(), "body": {"type" : annoType,"value" : annoValue,"format" : "text/plain"},"target": "http://127.0.0.1/sonify/"+_type });
+
+return  JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", "creator": "http://example.org/" + session, "id": "http://example.org/" + session + "anno" + commentid++, "type": "Annotation","created": new Date().toISOString(), "body": {"type" : annoType,"value" : annoValue,"format" : "text/plain"},"target": "http://127.0.0.1/sonify/"+_type });
 }
 
 //using the decibel calculation for volume
 function handleVolUp() {
-   //if (_gain < 1) {
-      //volume(dB) = 20 log10 (a1 / a0)
-      _gain = 20 * Math.log10((_gain + 0.1) / _gain);
-      createAnnotation("volume", _gain);
-   //}
-   console.log("Gain was " + _gain);
-   //console.log(_model);
-   //postData(_model);
+   _gain = 20 * Math.log10((_gain + 0.1) / _gain);
+   createAnnotation("volume", _gain);
 }
 
 function handleVolDown() {
@@ -65,12 +68,12 @@ function handleVolDown() {
 }
 
 function postData(endpoint, provdata, _type) {
-  console.log('posting');
-  $.post(endpoint, {"type": _type, "key": "fake", "data": JSON.stringify(provdata)});
+  $.post(endpoint, {"type": _type, "key": session, "data": JSON.stringify(provdata)});
 }
 
-function play (datafile) {
+function play (datafile, sessionid) {
 _type = datafile;
+session = sessionid;
 //make generic so we can re-use for comments
 let urltype = '';
 if (datafile == "garrick")
@@ -99,7 +102,7 @@ $.ajax({url: urltype, success: function( data ) {
    console.log(_model);
    //store the model of the notes
    postData(datafile, _model, 'notes');
-   postData('../prov/'+datafile, datafile, '');
+   postData('../prov/'+datafile, {"data":datafile, "id": id++}, '');
 }}); //end function
 
 

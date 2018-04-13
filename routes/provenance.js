@@ -1,11 +1,15 @@
 var express = require('express');
 var N3 = require('n3');
+const fs = require('fs');
 var router = express.Router();
 
 
 router.post('/comment', function(req, res, next) {
-  let uri = JSON.parse(req.body.data);
-  console.log(uri);
+  let uri = req.body.data;
+  let tmp = JSON.parse(uri);
+  let id = tmp['id'].split('/');
+  let sess = tmp['creator'].split('/');
+  createAnnotationGraph("./data/" +sess[sess.length-1] + id[id.length-1] + '.json', uri);
   res.status == 200;
 });
 
@@ -22,7 +26,10 @@ router.get('/:id', function(req, res, next) {
 */
 router.post('/:id', function(req, res, next) {
   let uri = JSON.parse(req.body.data);
-  createSonificationProvGraph(uri);
+  //session, uri, id
+  console.log(uri);
+  console.log(req.body.key);
+  createSonificationProvGraph(req.body.key, uri['data'], uri['id']);
   res.status == 200;
 });
 
@@ -30,6 +37,9 @@ var writer = N3.Writer( { 'prefixes' :
   { 'xsd':  'http://www.w3.org/2001/XMLSchema#',
    'prov': 'http://www.w3.org/ns/prov#',
    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+   'dc11': 'http://purl.org/dc/elements/1.1/',
+   'dc': 'http://purl.org/dc/terms/',
+   'oa': 'http://www.w3.org/ns/oa#',
    '': 'http://example.org/'
   }
 });
@@ -53,28 +63,19 @@ function storeProvGraph(graph, hashkey) {
   client.hset(hashkey, 'prov', graph, redis.print);
 }
 
-function createAnnotationGraph() {
+function createAnnotationGraph(fname, annotationGraph) {
 /*
-@prefix dc: <http://purl.org/dc/terms/> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix ns0: <http://www.w3.org/ns/oa#> .
-@prefix dc11: <http://purl.org/dc/elements/1.1/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-
-<http://example.org/anno>
-  a <http://www.w3.org/ns/oa#Annotation> ;
-  dc:created "2018-04-10T14:34:20.032Z"^^xsd:dateTime ;
-  ns0:hasBody [
-    a <http://njh.me/volume> ;
-    dc11:format "text/plain"^^xsd:string ;
-    rdf:value "0.5318603611900158"^^xsd:string
-  ] ;
-  ns0:hasTarget <http://127.0.0.1/sonify/> .
+ Write the annotation to disk
 */
+fs.writeFile(fname, annotationGraph, 'utf8', function (err) {
+    if (err) {
+        return console.log(err);
+    }
+} );
 }
 
 
-function createSonificationProvGraph(uri) {
+function createSonificationProvGraph(session, uri, id) {
    writer.addTriple( 'http://example.org/sonification', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/ns/prov#Entity');
    writer.addTriple( 'http://example.org/sonification', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#about', '"http://127.0.0.1:3000/sonify/'+uri);
    writer.addTriple( 'http://example.org/sonification', 'http://www.w3.org/ns/prov#wasGeneratedBy', 'http://example.org/note');
@@ -89,7 +90,7 @@ function createSonificationProvGraph(uri) {
    writer.addTriple( 'http://example.org/dataCollection', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/ns/prov#Activity');
    writer.addTriple( 'http://example.org/dataCollection', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#about', 'http://127.0.0.1:3000/data/'+uri);
 
-   writer.end(function (error, result) { console.log(result); });
+   writer.end(function (error, result) { createAnnotationGraph("./data/" + session + id + '.ttl', result ); });
 } 
 
 module.exports = router;
