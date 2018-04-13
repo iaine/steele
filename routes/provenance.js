@@ -9,7 +9,8 @@ router.post('/comment', function(req, res, next) {
   let tmp = JSON.parse(uri);
   let id = tmp['id'].split('/');
   let sess = tmp['creator'].split('/');
-  createAnnotationGraph("./data/" +sess[sess.length-1] + id[id.length-1] + '.json', uri);
+  // write the annotation to disk
+  createAnnotationGraph("./data/" +sess[sess.length-1], id[id.length-1] + '.json', uri);
   res.status == 200;
 });
 
@@ -26,9 +27,7 @@ router.get('/:id', function(req, res, next) {
 */
 router.post('/:id', function(req, res, next) {
   let uri = JSON.parse(req.body.data);
-  //session, uri, id
-  console.log(uri);
-  console.log(req.body.key);
+  //write the graph to disk
   createSonificationProvGraph(req.body.key, uri['data'], uri['id']);
   res.status == 200;
 });
@@ -63,11 +62,16 @@ function storeProvGraph(graph, hashkey) {
   client.hset(hashkey, 'prov', graph, redis.print);
 }
 
-function createAnnotationGraph(fname, annotationGraph) {
+function createAnnotationGraph(dir, fname, annotationGraph) {
 /*
  Write the annotation to disk
 */
-fs.writeFile(fname, annotationGraph, 'utf8', function (err) {
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+fs.writeFile(dir +'/' +fname, annotationGraph, 'utf8', function (err) {
     if (err) {
         return console.log(err);
     }
@@ -90,7 +94,7 @@ function createSonificationProvGraph(session, uri, id) {
    writer.addTriple( 'http://example.org/dataCollection', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 'http://www.w3.org/ns/prov#Activity');
    writer.addTriple( 'http://example.org/dataCollection', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#about', 'http://127.0.0.1:3000/data/'+uri);
 
-   writer.end(function (error, result) { createAnnotationGraph("./data/" + session + id + '.ttl', result ); });
+   writer.end(function (error, result) { createAnnotationGraph("./data/" + session, id + '.ttl', result ); });
 } 
 
 module.exports = router;
