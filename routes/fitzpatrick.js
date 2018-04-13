@@ -1,4 +1,5 @@
 var express = require('express');
+const uuidv1 = require('uuid/v1');
 var redis = require("redis"),
     client = redis.createClient();
 
@@ -26,7 +27,8 @@ router.get('/:id', function(req, res, next) {
   } else if (req.params.id == "steele" ) {
     title = "Joshua Steele";
   }
-  res.render('fitzpatrick', { title: title, data: req.params.id });
+  
+  res.render('fitzpatrick', { session:uuidv1(), title: title, data: req.params.id });
 });
 
 /* POST data to the Redis backend */
