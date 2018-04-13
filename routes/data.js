@@ -58,7 +58,7 @@ router.get('/:id', function(req, res, next) {
     default:
       break;
   }
-  res.send(req.params.id);
+  //res.send(req.params.id);
 });
 
 // Post data back to the server
