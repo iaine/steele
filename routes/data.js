@@ -33,11 +33,11 @@ router.get('/align', function(req, res, next) {
   var diffs = Array();
   buildSymbolTable(a.rows, A);
   buildSymbolTable(b.rows, B);
-  console.log('A ' + A.length + ' B ' + B.length);
+
   let master = new Array();
   alignSymbolLists(A, B, master);
   createDifference(master, diffs);
-  console.log(diffs);
+
   res.send(diffs);
 });
 
