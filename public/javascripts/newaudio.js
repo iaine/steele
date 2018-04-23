@@ -10,7 +10,7 @@ var _type = '';
 var session = '';
 
 //used to number the identity
-var commentid = 0;
+var commentid = 1;
 var id = 0;
 
 //set listeners for tags
@@ -50,14 +50,15 @@ function createAnnotation(annoType, annoValue) {
 }
 
 function makeAnnotationBody(annoType, annoValue) {
-
-return  JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", "creator": "http://example.org/" + session, "id": "http://example.org/anno" + commentid++, "type": "Annotation","created": new Date().toISOString(), "body": {"type" : annoType,"value" : annoValue,"format" : "text/plain"},"target": "http://127.0.0.1/sonify/"+_type });
+  let _n = commentid++;
+return  JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", "creator": "http://example.org/" + session, "id": "http://example.org/anno" + _n, "type": "Annotation","created": new Date().toISOString(), "body": {"type" : annoType,"value" : annoValue,"format" : "text/plain"},"target": [ "http://127.0.0.1/sonify/"+_type, './prov/'+session+'/model'+ _n] });
 }
 
 //using the decibel calculation for volume
 function handleVolUp() {
    _gain = 20 * Math.log10((_gain + 0.1) / _gain);
    createAnnotation("volume", _gain);
+   postData('../prov/model', {"data":_model, "id": (commentid-1)});
 }
 
 function handleVolDown() {
@@ -67,8 +68,8 @@ function handleVolDown() {
    }
 }
 
-function postData(endpoint, provdata, _type) {
-  $.post(endpoint, {"type": _type, "key": session, "data": JSON.stringify(provdata)});
+function postData(endpoint, provdata) {
+  $.post(endpoint, {"key": session, "data": JSON.stringify(provdata)});
 }
 
 function play (datafile, sessionid) {
@@ -99,10 +100,9 @@ $.ajax({url: urltype, success: function( data ) {
       //@todo fix the rate change
       note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
    });
-   console.log(_model);
    //store the model of the notes
-   postData(datafile, _model, 'notes');
-   postData('../prov/'+datafile, {"data":datafile, "id": id++}, '');
+   postData('../prov/model', {"data":_model, "id": id});
+   postData('../prov/'+datafile, {"data":datafile, "id": id});
 }}); //end function
 
 
