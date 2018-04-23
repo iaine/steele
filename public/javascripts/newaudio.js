@@ -51,7 +51,7 @@ function createAnnotation(annoType, annoValue) {
 
 function makeAnnotationBody(annoType, annoValue) {
 
-return  JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", "creator": "http://example.org/" + session, "id": "http://example.org/" + session + "anno" + commentid++, "type": "Annotation","created": new Date().toISOString(), "body": {"type" : annoType,"value" : annoValue,"format" : "text/plain"},"target": "http://127.0.0.1/sonify/"+_type });
+return  JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", "creator": "http://example.org/" + session, "id": "http://example.org/anno" + commentid++, "type": "Annotation","created": new Date().toISOString(), "body": {"type" : annoType,"value" : annoValue,"format" : "text/plain"},"target": "http://127.0.0.1/sonify/"+_type });
 }
 
 //using the decibel calculation for volume
