@@ -7,6 +7,9 @@
     // Start single note
     function start(audioCtx, frequency, note_length, volume, id) {
       let oscillator = audioCtx.createOscillator();
+
+      let osc2 = audioCtx.createOscillator();  
+
       let gainNode = audioCtx.createGain();
       gainNode.connect(audioCtx.destination);
       gainNode.gain.setValueAtTime(volume, id);
@@ -17,6 +20,14 @@
       oscillator.start(id);
       _model.push({'freq': frequency, 'gain': volume, 'duration': note_length, 'id':id  }); 
       oscillator.stop(id + note_length);
+
+      osc2.frequency.setValueAtTime(frequency, id);
+      osc2.frequency.exponentialRampToValueAtTime(frequency, audioCtx.currentTime + 0.03);
+      osc2.start(id);
+      _model.push({'freq': frequency, 'gain': volume, 'duration': note_length, 'id':id  });
+      osc2.stop(id + note_length);
+
+      osc2.connect(audioCtx.destination);
       oscillator.connect(audioCtx.destination);
     };
 
