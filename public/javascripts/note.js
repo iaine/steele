@@ -21,13 +21,13 @@
       _model.push({'freq': frequency, 'gain': volume, 'duration': note_length, 'id':id  }); 
       oscillator.stop(id + note_length);
 
-      osc2.frequency.setValueAtTime(frequency, id);
-      osc2.frequency.exponentialRampToValueAtTime(frequency, audioCtx.currentTime + 0.03);
+      /*osc2.frequency.setValueAtTime(2*frequency, id);
+      osc2.frequency.exponentialRampToValueAtTime(2*frequency, audioCtx.currentTime + 0.03);
       osc2.start(id);
-      _model.push({'freq': frequency, 'gain': volume, 'duration': note_length, 'id':id  });
+      _model.push({'freq': 2*frequency, 'gain': volume, 'duration': note_length, 'id':id  });
       osc2.stop(id + note_length);
 
-      osc2.connect(audioCtx.destination);
+      osc2.connect(audioCtx.destination);*/
       oscillator.connect(audioCtx.destination);
     };
 
