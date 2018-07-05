@@ -6,9 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-//var users = require('./routes/users');
-//var steele = require('./routes/steele');
-var fitz = require('./routes/fitzpatrick');
+var sonify = require('./routes/sonify');
 var data = require('./routes/data');
 var provenance = require('./routes/provenance');
 
@@ -27,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/sonify', fitz);
+app.use('/sonify', sonify);
 app.use('/data', data);
 app.use('/prov', provenance);
 

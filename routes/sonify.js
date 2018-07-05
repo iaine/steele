@@ -1,7 +1,7 @@
 var express = require('express');
 const uuidv1 = require('uuid/v1');
-var redis = require("redis"),
-    client = redis.createClient();
+//var redis = require("redis"),
+    //client = redis.createClient();
 
 var router = express.Router();
 
@@ -47,7 +47,7 @@ function setData(req) {
   var _data = req.body.data;
   var _type = req.body._type;
   
-  client.hset(_id + '::' + key, _type + milliseconds, _data, redis.print);
+  //client.hset(_id + '::' + key, _type + milliseconds, _data, redis.print);
 
 }
 
