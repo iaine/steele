@@ -9,6 +9,13 @@ block content
   p F: The stings and arrows &c.
   li: p(id='playbtn', onclick='play(\"' + data+ '\", \"' + session + '\")') Play  
 
+  ul
+    li: p(id='playbtn', onclick='play()') Play
+    li: p(id='volup') Volume Up
+    li: p(id='voldown') Volume Down
+    li: p(id='timeup') Time Up
+    li: p(id='timedown') Time Down
+
   script(src='/javascripts/note.js')
   script(src='/javascripts/object.js')
   script(src='/javascripts/newaudio.js')
