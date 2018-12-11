@@ -2,7 +2,7 @@
 var properties = [];
 
 var _gain = 0.5;
-
+var old = 1.0;
 //set type for the annotation
 var _type = '';
 
@@ -98,6 +98,7 @@ $.ajax({url: urltype, success: function( data ) {
       note = new Note();
       //frequency, note_length, volume, id
       //@todo fix the rate change
+      old = (i > 1) ? (i-1).pitch: 1.0;
       note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
    });
    //store the model of the notes

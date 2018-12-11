@@ -1,6 +1,7 @@
 var properties = [];
 
 var _gain = 0.5;
+var old = 1.0;
 
 //set listeners for tags
 var volup = document.getElementById("volup");
@@ -120,7 +121,7 @@ $.ajax({url: "data/steele", success: function( data ) {
            var make_note = function(j,k) {
                _old++;
                note = new Note();
-               note.start(audioCtx, _tmp_n(j, k), 1, vol, _old, _get_time(notes[i].value[3]));
+               note.start(audioCtx, _tmp_n(j, k), 1, vol, _old, _get_time(notes[i].value[3]), old);
            }
              //if k was type for rising; then 3 else -3
              var _tmp_n = function (j, k) {

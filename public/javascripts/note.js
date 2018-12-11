@@ -2,14 +2,17 @@
 
     function Note() {
         this.oscillators = Array();
+        var oldr = 1;
+        var oldl = 1;
     }
 
     // Start single note
-    function start(audioCtx, frequency, note_length, volume, id) {
+    function start(audioCtx, frequency, note_length, volume, id, old) {
       let oscillator = audioCtx.createOscillator();
-
-      let osc2 = audioCtx.createOscillator();  
-
+      
+      //let osc2 = audioCtx.createOscillator();  
+      console.log(old);
+      
       let gainNode = audioCtx.createGain();
       gainNode.connect(audioCtx.destination);
       gainNode.gain.setValueAtTime(volume, id);
@@ -17,6 +20,7 @@
       oscillator.type = "sine";
       oscillator.frequency.setValueAtTime(frequency, id);
       oscillator.frequency.exponentialRampToValueAtTime(frequency, audioCtx.currentTime + 0.03);
+      old = frequency;
       oscillator.start(id);
       _model.push({'freq': frequency, 'gain': volume, 'duration': note_length, 'id':id  }); 
       oscillator.stop(id + note_length);
@@ -36,11 +40,16 @@
  
       oscillatorL = context.createOscillator();
       
-      oscillatorL.frequency.setValueAtTime(witness['pitch'], alignid);
+      oscillatorL.frequency.setValueAtTime(this.oldl, alignid);
       oscillatorL.frequency.exponentialRampToValueAtTime(witness['pitch'], context.currentTime + 0.03);
+      this.oldl = witness['pitch'];
+      console.log("left old: " + this.oldl + " new " + witness['pitch']);
       oscillatorR = context.createOscillator();
-      oscillatorR.frequency.setValueAtTime(test['pitch'], alignid);
+      oscillatorR.frequency.setValueAtTime(this.oldr, alignid);
       oscillatorR.frequency.exponentialRampToValueAtTime(test['pitch'], context.currentTime + 0.03);
+      this.oldr = test['pitch'];
+      console.log("right old: " + this.oldr + " new " + test['pitch']);
+
       mergerNode = context.createChannelMerger(2); //create mergerNode with 2 inputs
       mergerNode.connect(context.destination);
 
