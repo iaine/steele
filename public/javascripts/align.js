@@ -67,7 +67,7 @@ $.ajax({url: '/data/align', success: function( data ) {
       note = new Note();
       //frequency, note_length, volume, id
       //@todo fix the rate change
-      let _vol = (i.duration == 0)? 0.1 : 0.5;:wq
+      let _vol = (i.duration == 0)? 0.1 : 0.5;
 
       note.start(audioCtx, 230.0, (1 + i.duration), _vol, i.id);
    });
