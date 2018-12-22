@@ -146,7 +146,7 @@ var createDifference = function(aligned_list, diffs) {
         let keys = Reflect.ownKeys(d.test);
          keys.forEach(function(a) {
            if (a != 'id') {
-             _tmp[a] = (0 - d.test[a]);
+             _tmp[a] = (0.0 - d.test[a]);
            } else {
              _tmp[a] = d.test[a];
            }
