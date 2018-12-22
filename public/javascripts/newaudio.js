@@ -72,6 +72,17 @@ function postData(endpoint, provdata) {
   $.post(endpoint, {"key": session, "data": JSON.stringify(provdata)});
 }
 
+
+//constants for this section
+var power = Math.pow(2, 1/12);
+
+/**
+*  function to calculate a note frequency
+*/
+var calculateFreq = function(base, newnote) {
+  return base * Math.pow(power, newnote);
+}
+
 function play (datafile, sessionid) {
 _type = datafile;
 session = sessionid;
@@ -99,7 +110,11 @@ $.ajax({url: urltype, success: function( data ) {
       //frequency, note_length, volume, id
       //@todo fix the rate change
       old = (i > 1) ? (i-1).pitch: 1.0;
-      note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
+      if (i.slide) {
+        note.start(audioCtx, i.pitch, i.duration, i.volume, i.id, calculateFreq(i.pitch, i.slide));
+      } else {
+        note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
+      }
    });
    //store the model of the notes
    postData('../prov/model', {"data":_model, "id": id});
