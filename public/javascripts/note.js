@@ -10,28 +10,21 @@
     function start(audioCtx, frequency, note_length, volume, id, old) {
       let oscillator = audioCtx.createOscillator();
       
-      //let osc2 = audioCtx.createOscillator();  
-      console.log(old);
-      
+      let _rampNote = (old)? old : frequency;
+      console.log("pitch: " + frequency + "  ramp: " + _rampNote);
+
       let gainNode = audioCtx.createGain();
       gainNode.connect(audioCtx.destination);
       gainNode.gain.setValueAtTime(volume, id);
-      
+        
       oscillator.type = "sine";
       oscillator.frequency.setValueAtTime(frequency, id);
-      oscillator.frequency.exponentialRampToValueAtTime(frequency, audioCtx.currentTime + 0.03);
-      old = frequency;
+      oscillator.frequency.exponentialRampToValueAtTime(_rampNote, id + 0.5);
+    
       oscillator.start(id);
       _model.push({'freq': frequency, 'gain': volume, 'duration': note_length, 'id':id  }); 
       oscillator.stop(id + note_length);
 
-      /*osc2.frequency.setValueAtTime(2*frequency, id);
-      osc2.frequency.exponentialRampToValueAtTime(2*frequency, audioCtx.currentTime + 0.03);
-      osc2.start(id);
-      _model.push({'freq': 2*frequency, 'gain': volume, 'duration': note_length, 'id':id  });
-      osc2.stop(id + note_length);
-
-      osc2.connect(audioCtx.destination);*/
       oscillator.connect(audioCtx.destination);
     };
 
@@ -39,16 +32,19 @@
     function altnote(context, witness, test, alignid) {
  
       oscillatorL = context.createOscillator();
-      
-      oscillatorL.frequency.setValueAtTime(this.oldl, alignid);
-      oscillatorL.frequency.exponentialRampToValueAtTime(witness['pitch'], context.currentTime + 0.03);
+
       this.oldl = witness['pitch'];
       console.log("left old: " + this.oldl + " new " + witness['pitch']);
+
+      this.oldr = test['pitch'];
+      console.log("right old: " + this.oldr + " new " + test['pitch']);
+
+      oscillatorL.frequency.setValueAtTime(this.oldl, alignid);
+      oscillatorL.frequency.exponentialRampToValueAtTime(witness['pitch'], context.currentTime + 0.03);
+
       oscillatorR = context.createOscillator();
       oscillatorR.frequency.setValueAtTime(this.oldr, alignid);
       oscillatorR.frequency.exponentialRampToValueAtTime(test['pitch'], context.currentTime + 0.03);
-      this.oldr = test['pitch'];
-      console.log("right old: " + this.oldr + " new " + test['pitch']);
 
       mergerNode = context.createChannelMerger(2); //create mergerNode with 2 inputs
       mergerNode.connect(context.destination);
