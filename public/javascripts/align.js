@@ -59,7 +59,7 @@ function postData(data) {
 function play (datafile) {
 
 
-$.ajax({url: '/data/align', success: function( data ) {
+$.ajax({url: '../data/align', success: function( data ) {
   var notes = data;
   console.log(notes);
    var audioCtx = new AudioContext(); 
@@ -68,7 +68,8 @@ $.ajax({url: '/data/align', success: function( data ) {
       //frequency, note_length, volume, id
       //@todo fix the rate change
       let _vol = (i.duration == 0)? 0.1 : 0.5;
-
+      console.log('Note');
+      console.log(i);
       note.start(audioCtx, 230.0, (1 + i.duration), _vol, i.id);
    });
  
