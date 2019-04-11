@@ -111,9 +111,10 @@ $.ajax({url: urltype, success: function( data ) {
       //@todo fix the rate change
       old = (i > 1) ? (i-1).pitch: 1.0;
       if (i.slide) {
-        note.start(audioCtx, i.pitch, i.duration, i.volume, i.id, calculateFreq(i.pitch, i.slide));
+        //(audioContext, frequency, note_length, volume, adsrEnv, id)
+        note.playEnvelopeTone(audioCtx, i.pitch, i.duration, i.volume, adsrEnv, i.id, calculateFreq(i.pitch, i.slide));
       } else {
-        note.start(audioCtx, i.pitch, i.duration, i.volume, i.id);
+        note.playEnvelopeTone(audioCtx, i.pitch, i.duration, i.volume, adsrEnv, i.id);
       }
    });
    //store the model of the notes
