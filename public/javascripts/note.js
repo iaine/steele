@@ -6,6 +6,23 @@
         var oldl = 1;
     }
 
+   /**
+   *  ADSR function
+   *  Usage:  let gainNode = adsr(id + 0.1 + 0.03, 0.01, 0.08, 0, 0, 0);
+   *  Replaces using a GainNode on its own. 
+   */
+   function adsr(T, a, d, s, r, sustain) {
+      var gainNode = audioCtx.createGain();
+      function set(v, t) { gainNode.gain.linearRampToValueAtTime(v, T + t); }
+        set(0.0, -T);
+        set(0.0, 0);
+        set(1.0, a);
+        set(sustain, a + d);
+        set(sustain, a + d + s);
+        set(0.0, a + d + s + r);
+      return gainNode;
+    }
+
     // Start single note
     function start(audioCtx, frequency, note_length, volume, id, old) {
       let oscillator = audioCtx.createOscillator();
@@ -119,9 +136,32 @@
       oscillatorR.stop(alignid + test['duration']);
 
     };
+
+    function playEnvelopeTone (audioContext, frequency, note_length, volume, adsrEnv, id, old) {
+
+
+        let oscillator = audioContext.createOscillator();
+
+        let _rampNote = (old)? old : frequency
+
+        let gainNode = adsr(audioContext, id, adsrEnv);
+
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(frequency, id);
+        oscillator.frequency.exponentialRampToValueAtTime(_rampNote, id + 0.03);
+        oscillator.start(id);
+        oscillator.stop(id + note_length);
+
+        //connect all the parts up now
+        oscillator.connect(audioContext.destination);
+        gainNode.connect(audioContext.destination);
+
+    };
+
     return {
         start:start, 
         altnote:altnote, 
-        pausenote:pausenote
+        pausenote:pausenote, 
+        playEnvelopeTone:playEnvelopeTone
     }
   };
