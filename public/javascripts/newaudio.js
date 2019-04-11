@@ -102,7 +102,7 @@ var notes = Array();
 $.ajax({url: urltype, success: function( data ) {
   notes = data.rows;
   
-   //window.AudioContext = window.AudioContext || window.webkitAudioContext;
+   let adsrEnv = {'a':0.1, 'd':0.8, 's':0.3, 'r':0.1, 'sustain': 0.1};
 
    var audioCtx = new AudioContext(); 
    notes.forEach(function (i) {
