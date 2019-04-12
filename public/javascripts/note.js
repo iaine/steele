@@ -11,16 +11,17 @@
    *  Usage:  let gainNode = adsr(id + 0.1 + 0.03, 0.01, 0.08, 0, 0, 0);
    *  Replaces using a GainNode on its own. 
    */
-   function adsr(T, a, d, s, r, sustain) {
-      var gainNode = audioCtx.createGain();
-      function set(v, t) { gainNode.gain.linearRampToValueAtTime(v, T + t); }
+   
+   function adsr (audioCtx, T, adsrEnv) {
+        var gainNode = audioCtx.createGain();
+        function set(v, t) { gainNode.gain.linearRampToValueAtTime(v, T + t); }
         set(0.0, -T);
         set(0.0, 0);
-        set(1.0, a);
-        set(sustain, a + d);
-        set(sustain, a + d + s);
-        set(0.0, a + d + s + r);
-      return gainNode;
+        set(1.0, adsrEnv['a']);
+        set(adsrEnv['sustain'], adsrEnv['a'] + adsrEnv['d']);
+        set(adsrEnv['sustain'], adsrEnv['a'] + adsrEnv['d'] + adsrEnv['s']);
+        set(0.0, adsrEnv['a'] + adsrEnv['d'] + adsrEnv['s'] + adsrEnv['r']);
+        return gainNode;
     }
 
     // Start single note
