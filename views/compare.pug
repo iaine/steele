@@ -2,14 +2,16 @@ extends layout
 
 block content
   h1= title
+
+  p(id='intro') This uses a binaural sonification to play Steele's sonification into the left ear and Garrick into the right. The intention is to compare both versions.
+
   p To be, or not to be, that is the Question: 
   p Whether 'tis Nobler in the minde to suffer
   p F: Whether it is nobler in the mind, to suffer –
   p The Slings and Arrowes of outragious Fortune,
   p F: The stings and arrows &c.
-  li: p(id='playbtn', onclick='play(\"' + data+ '\")') Play  
-
-  ul
+  ul(id='controls')
+    li: p(id='playbtn', onclick='play(\"' + data+ '\", \"' + session + '\")') Play
     li: p(id='volup') Volume Up
     li: p(id='voldown') Volume Down
     li: p(id='timeup') Time Up
