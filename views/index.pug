@@ -1,11 +1,18 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+  body
+    ul(id='navbar')
+      li(id='navigation'): a(href='/') Home
+      li(id='navigation'): a(href='sonify/') Sonifications
+      li(id='navigation'): a(href='sonify/compare') Comparison
+      li(id='navigation'): a(href='sonify/align')  Alignment
+      li(id='navigation'): a(href='sonify/pause')  Pauses
 
-block content
-  h1= title
-  p Holding page for the Elocution Society Simulation
-  ul
-    li: a(href='sonify/steele') Joshua Steele 
- 
-    li: a(href='sonify/fitzpatrick') Thaddeus Fitzpatrick
-
-    li: a(href='sonify/garrick') David Garrick
+  block content
+    h1= title
+    p An experiment in sonification to work with part of the Prosodia Rationalis. 
+    p Please select from the options in the navigation bar above to select a type of sonification. 
