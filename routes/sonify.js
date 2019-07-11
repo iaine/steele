@@ -5,6 +5,12 @@ const uuidv1 = require('uuid/v1');
 
 var router = express.Router();
 
+router.get('/', function(req, res, next) {
+  let title = 'Sonifications Homepage';
+
+  res.render('index', { title: title});
+});
+
 router.get('/compare', function(req, res, next) {
   res.render('compare', { title: 'Compare' });
 });
