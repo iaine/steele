@@ -5,4 +5,20 @@ body {
 
 a {
   color: #00B7FF;
+  text-decoration: none;
+}
+
+ul#navbar, ul#controls {
+   list-style-type: none;
+}
+
+#navigation {
+   display: inline-block;
+   margin: 2%;   
+}
+
+/* Lower list styling */
+li > #controls {
+   display: inline-block;
+   margin: 2%;
 }
